@@ -35,7 +35,9 @@ jobs:
         uses: foundry-rs/foundry-toolchain@v1
 
       - name: Update
-        run: output_update_log=$(scripts/gen_output.sh)
+        run: |
+          git config --global user.email "update@update.com"  git config --global user.name "update"
+          output_update_log=$(scripts/gen_output.sh)
 
       - name: Create commit
         run: |
