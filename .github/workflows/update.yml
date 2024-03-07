@@ -11,17 +11,7 @@ env:
   BRANCH: output-update
   TITLE: "chore(output): weekly `gen_output.sh`"
   BODY: |
-    Automation to keep output and references current.
-
-    <details><summary><strong>output update log</strong></summary>
-    <p>
-
-    ```log
-    $output_update_log
-    ```
-
-    </p>
-    </details>
+    This is an automated update to the output and references.
 
 jobs:
   update:
@@ -38,21 +28,15 @@ jobs:
         run: |
           git config --global user.email "update@update.com"
           git config --global user.name "update"
-          output_update_log=$(scripts/gen_output.sh)
+          ./scripts/gen_output.sh
 
       - name: Create commit
         run: |
-          export output_update_log="$(cat output_update.log)"
-
-          echo "commit_message<<EOF" >> $GITHUB_OUTPUT
-          printf "$TITLE\n\n$output_update_log\n" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
           echo "body<<EOF" >> $GITHUB_OUTPUT
-          echo "$BODY" | envsubst >> $GITHUB_OUTPUT
+          echo "$BODY">> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: Create Pull Request
+      - name: Create pull request
         uses: peter-evans/create-pull-request@v5
         with:
           commit-message: ${{ steps.msg.outputs.commit_message }}
