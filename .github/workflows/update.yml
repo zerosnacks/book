@@ -6,13 +6,6 @@ on:
   workflow_dispatch:
     # Needed so we can run it manually
 
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  BRANCH: output-update
-  TITLE: "chore(output): weekly `gen_output.sh`"
-  BODY: |
-    This is an automated update to the output and references.
-
 jobs:
   update:
     name: Update
@@ -30,16 +23,12 @@ jobs:
           git config --global user.name "update"
           ./scripts/gen_output.sh
 
-      - name: Create commit
-        run: |
-          echo "body<<EOF" >> $GITHUB_OUTPUT
-          echo "$BODY">> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
       - name: Create pull request
         uses: peter-evans/create-pull-request@v5
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: ${{ steps.msg.outputs.commit_message }}
-          title: ${{ env.TITLE }}
-          body: ${{ steps.msg.outputs.body }}
-          branch: ${{ env.BRANCH }}
+          title: "chore(output): weekly command output update"
+          body: |
+            Automation to keep command output up to date.
+          branch: chore/output-update
