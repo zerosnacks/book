@@ -26,8 +26,6 @@ jobs:
       - name: Create pull request
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: ${{ steps.msg.outputs.commit_message }}
           title: "chore(output): weekly command output update"
           body: |
             Automation to keep command output up to date.
